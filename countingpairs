@@ -1,0 +1,28 @@
+def countPairs(lst, k):
+    pairs = []
+    count = 0
+
+    lst.sort()
+
+    n = len(lst)
+    low = 0
+    high = 0
+
+    while high < n:
+        if lst[high] - lst[low] == k:
+            count += 1
+            pairs.append((lst[low], lst[high]))
+            low += 1
+            high += 1
+
+        elif lst[high] - lst[low] > k:
+            low += 1
+        else:
+            high += 1
+    return count, pairs
+
+
+lst = [1, 3, 5, -5, -7]
+k = 2
+count, pairs = countPairs(lst, k)
+print("We have {} pairs: {}".format(count, pairs))
