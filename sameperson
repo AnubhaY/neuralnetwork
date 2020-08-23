@@ -1,0 +1,29 @@
+import pandas as pd
+
+data = [
+    ("username1", "phone_number1", "email1"),
+    ("usernameX", "phone_number1", "emailX"),
+    ("usernameZ", "phone_numberZ", "email1Z"),
+    ("usernameY", "phone_numberY", "emailX"),
+]
+
+df = pd.DataFrame(data)
+columns = ['uname', 'phone', 'email']
+df.columns = columns
+
+df.insert(len(columns), 'cluster', range(len(df)))
+
+
+for colname in columns:
+    df2 = df[df.duplicated([colname])]
+    for index, row in df2.iterrows():
+        clusters = df[df[colname] == row[colname]]['cluster'].tolist()
+        df.loc[df[colname] == row[colname], 'cluster'] = row['cluster']
+        for cluster in clusters:
+            df.loc[df['cluster'] == cluster, 'cluster'] = row['cluster']
+
+clusters = []
+for cluster in (df['cluster'].unique().tolist()):
+    clusters.append(df[df['cluster'] == cluster].index.tolist())
+
+print(clusters)
